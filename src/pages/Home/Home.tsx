@@ -1,6 +1,8 @@
 
 import { useState, useEffect, ChangeEvent } from 'react';
 import {Container, Input, TimerDisplay} from './style'
+import {format} from 'date-fns'
+import { ptBR } from 'date-fns/locale';
 
 export function Home(){
     const [seconds, setSeconds] = useState<number>(0);
@@ -28,6 +30,8 @@ export function Home(){
       }
     };
 
+    const dataFormatada = format(new Date(), "'Dia' dd 'de' MMMM 'de' yyyy 'às' HH:mm:ss", {locale: ptBR});
+    console.log(dataFormatada);
 
     return(
         <Container>
