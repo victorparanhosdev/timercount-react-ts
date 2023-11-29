@@ -57,6 +57,8 @@ export function Home() {
   const seconds = String(secondsAmout).padStart(2, '0')
 
 
+
+
   useEffect(() => {
 
 
@@ -65,12 +67,12 @@ export function Home() {
     if (ActiveNumber) {
 
       interval = setInterval(() => {
-
         const CounterSeconds = differenceInSeconds(new Date(), ActiveNumber.startNumber)
         setAmouteSecondsPassed(CounterSeconds)
         if (CounterSeconds === dataSeconds) {
           setActiveId(null)
-
+          clearInterval(interval)
+          
         }
 
 
@@ -87,7 +89,16 @@ export function Home() {
 
 
 
+  useEffect(() => {
 
+    if (ActiveNumber) {
+      document.title = `CountTimer ${minutes}:${seconds}`
+
+    }
+
+
+
+  }, [minutes, seconds, ActiveNumber])
 
   return (
     <Container>
