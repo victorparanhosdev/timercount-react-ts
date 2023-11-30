@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useReducer } from 'react';
 import { Container } from './style'
 import { differenceInSeconds } from 'date-fns'
 
@@ -9,6 +9,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import * as zod from 'zod'
 
 type newCicleProps = zod.infer<typeof newCicle>
+
 interface PropsTimer {
   id: string,
   numeroplay: number,
@@ -18,8 +19,19 @@ const newCicle = zod.object({
   numeroplay: zod.number().min(1, 'minimo 1').max(60, 'o maximo é 60')
 })
 
+
+
 export function Home() {
-  const [dataTime, setdataTime] = useState<PropsTimer[]>([])
+  const [dataTime, dispatch] = useReducer((state: PropsTimer[], action: any)=> {
+
+   if(action.type === "ADD_NEW_CICLE"){
+    return [...state, action.payload.DadosTimer]
+   }
+
+      return state
+  },[])
+
+
   const [isActiveId, setActiveId] = useState<string | null>(null)
   const [amouteSecondsPassed, setAmouteSecondsPassed] = useState(0)
 
@@ -30,6 +42,8 @@ export function Home() {
     }
   })
 
+
+
   function addDataForm(data: newCicleProps) {
     const DadosTimer = {
       id: String(new Date().getTime()),
@@ -39,7 +53,15 @@ export function Home() {
 
     setActiveId(DadosTimer.id)
     setAmouteSecondsPassed(0)
-    setdataTime(state => [...state, DadosTimer])
+
+    dispatch({
+      type: 'ADD_NEW_CICLE',
+      payload: {
+        DadosTimer
+      }
+
+    })
+
     reset()
   }
 
