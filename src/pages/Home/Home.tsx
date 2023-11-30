@@ -1,7 +1,7 @@
 import { useState, useEffect, useReducer } from "react";
 import { Container } from "./style";
 import { differenceInSeconds } from "date-fns";
-
+import {ActionCycles, ReducersFunctionCycle} from '../../reducers/reducers'
 import { Plus } from "@phosphor-icons/react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -9,7 +9,7 @@ import * as zod from "zod";
 
 type newCicleProps = zod.infer<typeof newCicle>;
 
-interface PropsTimer {
+export interface PropsTimer {
   id: string;
   numeroplay: number;
   startNumber: Date;
@@ -18,30 +18,10 @@ const newCicle = zod.object({
   numeroplay: zod.number().min(1, "minimo 1").max(60, "o maximo é 60"),
 });
 
-interface Cycles {
-  dataTime: PropsTimer[];
-  isActiveId: string | null;
-}
+
 
 export function Home() {
-  const [newCycleReducer, dispatch] = useReducer(
-    (state: Cycles, action: any) => {
-      if (action.type === "ADD_NEW_CICLE") {
-        return {
-          dataTime: [...state.dataTime, action.payload.DadosTimer],
-          isActiveId: action.payload.DadosTimer.id,
-        };
-      }
-      if (action.type === "INTERRUPTED") {
-        return {
-          dataTime: [...state.dataTime],
-          isActiveId: null,
-        };
-      }
-
-      return state;
-    },
-    {
+  const [newCycleReducer, dispatch] = useReducer(ReducersFunctionCycle,{
       dataTime: [],
       isActiveId: null,
     }
@@ -74,7 +54,7 @@ export function Home() {
     setAmouteSecondsPassed(0);
 
     dispatch({
-      type: "ADD_NEW_CICLE",
+      type: ActionCycles.ADD_NEW_CICLE,
       payload: {
         DadosTimer,
       },
@@ -108,7 +88,7 @@ export function Home() {
         );
         setAmouteSecondsPassed(CounterSeconds);
         if (CounterSeconds === dataSeconds) {
-          dispatch({ type: "INTERRUPTED" });
+          dispatch({ type: ActionCycles.INTERRUPTED });
           clearInterval(interval);
         }
       }, 1000);
