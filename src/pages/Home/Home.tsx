@@ -72,7 +72,7 @@ export function Home() {
         if (CounterSeconds === dataSeconds) {
           setActiveId(null)
           clearInterval(interval)
-          
+
         }
 
 
@@ -90,14 +90,7 @@ export function Home() {
 
 
   useEffect(() => {
-
-    if (ActiveNumber) {
-      document.title = `CountTimer ${minutes}:${seconds}`
-
-    }
-
-
-
+    document.title = `CountTimer ${minutes}:${seconds}`
   }, [minutes, seconds, ActiveNumber])
 
   return (
